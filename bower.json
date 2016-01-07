@@ -1,10 +1,10 @@
 {
   "name": "paper-star-rating",
-  "version": "1.0.6",
+  "version": "1.0.0",
   "authors": [
-    "Anonymous <anonymous@example.com>"
+    "AlexisGeneau <contact@alexis-geneau.fr>"
   ],
-  "description": "An element providing a solution to no problem in particular.",
+  "description": "Rate system with star for polymer",
   "keywords": [
     "web-component",
     "polymer",
