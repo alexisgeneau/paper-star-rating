@@ -14,6 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../iron-behaviors/iron-control-state.html">
 <link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 
 <!--
 An element providing a solution to no problem in particular.
@@ -41,8 +42,10 @@ Example:
                 user-select: none;
             }
 
-           div {
+            #block {
                 outline: none;
+                padding: 8px;
+
             }
 
             iron-icon {
@@ -53,9 +56,10 @@ Example:
 
         <content></content>
 
-        <div id="block"  tabindex="0">
+        <div id="block" on-mouseout="_resetToInitValue" style$="width:[[sectionWidth]]" tabindex="0">
             <template is="dom-repeat" items="[[starTab]]">
-                <iron-icon on-tap="_selectStar" icon="icons:[[item]]" width="[[size]]px"></iron-icon>
+                <iron-icon on-mousemove="_hoverStar" on-tap="_selectStar" on-track="_selectStar"
+                           icon="icons:[[item]]"></iron-icon>
             </template>
         </div>
 
@@ -95,22 +99,31 @@ Example:
                     value: 0,
                     notify: true
                 },
+                initValue: {
+                    type: Number,
+                    value: 0
+                },
                 star: {
                     type: Number,
                     value: 5
                 },
                 starTab: {
                     type: Array
+                },
+                sectionWidth: {
+                    type: String,
+                    value: 'auto',
+                    computed: '_computSectionWidth(star,blockWidth)'
                 }
             },
 
             observers: ['_refreshTab(star,value)'],
 
             _selectStar: function (item) {
-                if (!this.disabled) {
+                if (!this.disabled && item.detail.sourceEvent.srcElement._templateInstance) {
                     this.mouseX = (item.detail.sourceEvent.layerX);
                     this.blockWidth = (item.srcElement.offsetWidth);
-                    var tempRank = item.model.index;
+                    var tempRank = item.detail.sourceEvent.srcElement._templateInstance.index;
                     if (this.mouseX < this.blockWidth / 3)
                         this.mouseX = 0;
                     else if (this.mouseX > this.blockWidth * 3 / 5) {
@@ -120,6 +133,7 @@ Example:
                         this.mouseX = 0.5;
 
                     this.value = tempRank + this.mouseX;
+                    this.initValue = this.value;
                 }
             },
 
@@ -145,6 +159,34 @@ Example:
                 this.starTab = tab;
             },
 
+            _hoverStar: function (e) {
+                if (!this.disabled) {
+                    this.mouseX = (e.layerX);
+                    this.blockWidth = (e.srcElement.offsetWidth);
+                    var tempRank = e.srcElement._templateInstance.index;
+                    if (this.mouseX < this.blockWidth / 3)
+                        this.mouseX = 0;
+                    else if (this.mouseX > this.blockWidth * 3 / 5) {
+                        this.mouseX = 0;
+                        tempRank++;
+                    } else
+                        this.mouseX = 0.5;
+
+                    this.value = tempRank + this.mouseX;
+                }
+            },
+
+            _resetToInitValue: function (e) {
+                console.log(e);
+                if (e.srcElement.className == "style-scope paper-star-rating") {
+                    this.value = this.initValue;
+                }
+            },
+
+            _computSectionWidth: function(star, blockWidth){
+              return (star*blockWidth)+(star*4)+'px';
+            },
+
             handleKeys: function (event, detail, sender) {
                 if (!this.disabled) {
                     var keyIdentifier = event.detail.key;
@@ -163,15 +205,19 @@ Example:
                             return;
                     }
                 }
-            },
+            }
+            ,
 
             incrementValue: function () {
                 if (this.value < this.star)
                     this.value = this.value + 0.5;
-            },
+                    this.initValue = this.value;
+            }
+            ,
             decrementValue: function () {
                 if (this.value > 0)
                     this.value = this.value - 0.5;
+                    this.initValue = this.value;
             }
 
         });
