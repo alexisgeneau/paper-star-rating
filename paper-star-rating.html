@@ -44,13 +44,18 @@ Example:
            div {
                 outline: none;
             }
+
+            iron-icon {
+                --iron-icon-width: var(--paper-star-rating-icon-size, 35px);
+                --iron-icon-height: var(--paper-star-rating-icon-size, 35px);
+            }
         </style>
 
         <content></content>
 
         <div id="block"  tabindex="0">
             <template is="dom-repeat" items="[[starTab]]">
-                <iron-icon on-tap="_selectStar" icon="icons:[[item]]"></iron-icon>
+                <iron-icon on-tap="_selectStar" icon="icons:[[item]]" width="[[size]]px"></iron-icon>
             </template>
         </div>
 
@@ -108,7 +113,7 @@ Example:
                     var tempRank = item.model.index;
                     if (this.mouseX < this.blockWidth / 3)
                         this.mouseX = 0;
-                    else if (this.mouseX > this.blockWidth * 2 / 3) {
+                    else if (this.mouseX > this.blockWidth * 3 / 5) {
                         this.mouseX = 0;
                         tempRank++;
                     } else

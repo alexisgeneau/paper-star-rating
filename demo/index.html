@@ -17,6 +17,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <link rel="import" href="../paper-star-rating.html">
   </head>
   <body unresolved>
+  <style is="custom-style">
+    paper-star-rating {
+      --paper-star-rating-icon-size: 40px;
+    }
+  </style>
   <template is="dom-bind">
     <paper-star-rating star="5" value="{{value}}"></paper-star-rating>
     <h1>[[value]]</h1>
