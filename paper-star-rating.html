@@ -41,11 +41,14 @@ Example:
                 -khtml-user-select: none;
                 -o-user-select: none;
                 user-select: none;
+                @apply(--layout-horizontal);
+                @apply(--layout-center-center);
             }
 
             #block {
                 outline: none;
                 padding: 8px;
+                @apply(--layout-horizontal);
 
             }
 
@@ -59,7 +62,7 @@ Example:
             }
         </style>
 
-        <div id="block" on-mouseout="_resetToInitValue" style$="width:[[sectionWidth]]" tabindex="0">
+        <div id="block" on-mouseout="_resetToInitValue" tabindex="0">
             <template is="dom-repeat" items="[[starTab]]">
                 <iron-icon on-mousemove="_hoverStar" on-tap="_selectStar" on-track="_selectStar"
                            icon="icons:[[item]]" class$="[[item]]"></iron-icon>
@@ -112,11 +115,6 @@ Example:
                 },
                 starTab: {
                     type: Array
-                },
-                sectionWidth: {
-                    type: String,
-                    value: 'auto',
-                    computed: '_computSectionWidth(star,blockWidth)'
                 }
             },
 
@@ -184,10 +182,6 @@ Example:
                 if (e.srcElement.className == "style-scope paper-star-rating") {
                     this.value = this.initValue;
                 }
-            },
-
-            _computSectionWidth: function(star, blockWidth){
-              return (star*blockWidth)+(star*4)+'px';
             },
 
             handleKeys: function (event, detail, sender) {
