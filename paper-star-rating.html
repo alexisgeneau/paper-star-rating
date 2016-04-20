@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-behaviors/iron-control-state.html">
 <link rel="import" href="../iron-form-element-behavior/iron-form-element-behavior.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../paper-styles/color.html">
 
 <!--
 An element providing a solution to no problem in particular.
@@ -51,15 +52,17 @@ Example:
             iron-icon {
                 --iron-icon-width: var(--paper-star-rating-icon-size, 35px);
                 --iron-icon-height: var(--paper-star-rating-icon-size, 35px);
+                color: var(--paper-star-color, --paper-grey-800);
+            }
+            .star-border{
+                color: var(--paper-empty-star-color, --paper-grey-300);
             }
         </style>
-
-        <content></content>
 
         <div id="block" on-mouseout="_resetToInitValue" style$="width:[[sectionWidth]]" tabindex="0">
             <template is="dom-repeat" items="[[starTab]]">
                 <iron-icon on-mousemove="_hoverStar" on-tap="_selectStar" on-track="_selectStar"
-                           icon="icons:[[item]]"></iron-icon>
+                           icon="icons:[[item]]" class$="[[item]]"></iron-icon>
             </template>
         </div>
 
@@ -177,7 +180,7 @@ Example:
             },
 
             _resetToInitValue: function (e) {
-                console.log(e);
+                e.preventDefault;
                 if (e.srcElement.className == "style-scope paper-star-rating") {
                     this.value = this.initValue;
                 }
